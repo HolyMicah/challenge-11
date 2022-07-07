@@ -2,7 +2,8 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const PORT = process.env.PORT || 8000;
+const serverPort = 8080;
+const PORT = process.env.PORT || serverPort;
 const app = express();
 
 // USING CRYPTO TO GENERATE A RANDOM ID FOR EACH ADDED NOTE
@@ -18,16 +19,17 @@ app.use(express.static('public'));
     // GET ROUTES
 
 app.get('/notes',(req, res) => {
-    res.sendFile(path.join(__dirname, '/public/notes.html'));
+    res.sendFile(path.join(__dirname, './public/notes.html'));
 });
 
 app.get('/api/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, "/db/db.json"));
+    res.sendFile(path.join(__dirname, "./db/db.json"));
+    res.json(`${req.method} request recieved to get notes`)
     console.info(`${req.method} request recieved to get notes`);
 });
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
+    res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
 
@@ -41,12 +43,12 @@ app.post('/api/notes',(req, res) => {
     console.info(`${req.method} request recieved to add a note`)
 
     let addedNote = req.body;
-    let noteList = JSON.parse(fs.readFileSync("/db/db.json"));
-    let noteLength = (noteList.length).toString();
+    let noteList = JSON.parse(fs.readFileSync("./db/db.json"));
+    
     
     addedNote.id = randomId();
     noteList.push(addedNote);
-    fs.writeFileSync("/db/db.json", JSON.stringify(noteList));
+    fs.writeFileSync("./db/db.json", JSON.stringify(noteList));
     res.json(noteList)  
 });
 
