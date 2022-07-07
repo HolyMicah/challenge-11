@@ -5,6 +5,9 @@ const fs = require("fs");
 const PORT = process.env.PORT || 8000;
 const app = express();
 
+// USING CRYPTO TO GENERATE A RANDOM ID FOR EACH ADDED NOTE
+const randomId = require("crypto");
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,7 +44,7 @@ app.post('/api/notes',(req, res) => {
     let noteList = JSON.parse(fs.readFileSync("/db/db.json"));
     let noteLength = (noteList.length).toString();
     
-    addedNote.id = noteLength;
+    addedNote.id = randomId();
     noteList.push(addedNote);
     fs.writeFileSync("/db/db.json", JSON.stringify(noteList));
     res.json(noteList)  
