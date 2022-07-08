@@ -24,8 +24,8 @@ app.get('/notes',(req, res) => {
 
 app.get('/api/notes', (req, res) => {
     res.sendFile(path.join(__dirname, "./db/db.json"));
-    res.json(`${req.method} request recieved to get notes`)
-    console.info(`${req.method} request recieved to get notes`);
+    let data = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    response.json(data);
 });
 
 app.get("*", (req, res) => {
@@ -43,10 +43,10 @@ app.post('/api/notes',(req, res) => {
     console.info(`${req.method} request recieved to add a note`)
 
     let addedNote = req.body;
-    let noteList = JSON.parse(fs.readFileSync("./db/db.json"));
+    let noteList = JSON.parse(fs.readFileSync("./db/db.json", "utf-8"));
     
     
-    addedNote.id = randomId();
+    addedNote.id = randomId;
     noteList.push(addedNote);
     fs.writeFileSync("./db/db.json", JSON.stringify(noteList));
     res.json(noteList)  
