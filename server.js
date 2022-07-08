@@ -25,7 +25,7 @@ app.get('/notes',(req, res) => {
 app.get('/api/notes', (req, res) => {
     res.sendFile(path.join(__dirname, "./db/db.json"));
     let data = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
-    response.json(data);
+    res.json(data);
 });
 
 app.get("*", (req, res) => {
